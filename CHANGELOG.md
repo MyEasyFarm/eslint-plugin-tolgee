@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-05-23
+
 ### Added
 
 - **`tolgee/no-self-closing-tags`** — new rule that flags self-closing tag syntax (`<name/>`) inside Tolgee translation default values. Per the [Tolgee tags-interpolation docs](https://docs.tolgee.io/js-sdk/integrations/react/tags-interpolation), "non-closing tags and self-closing tags are not supported (issue [#3101](https://github.com/tolgee/tolgee-js/issues/3101))" — `<br/>` is not parsed and must be written as `<br></br>`. Covers `t()`, `tolgee.t()`, and `<T defaultValue=…>` (string literal or template literal without expressions). **Autofixable**: rewrites each `<name/>` to `<name></name>` in place. Conservative under non-literal defaults (identifiers, template literals with `${…}` expressions) and never touches a `<T>` element's own JSX self-closing form. Non-closing tags (`<br>` without `</br>`) are out of scope for v1 and tracked as a follow-up. Enabled in `recommended` at `error`.
@@ -22,7 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 - Extracted shared callee/component predicates to `src/utils/isTranslationCall.ts` (`isTranslationCall`, `isTComponent`). `require-key.ts`, `prefer-string-arguments.ts`, and `no-dynamic-key.ts` now share the same matcher. Semantics preserved bug-for-bug.
 
-### Known issues (carry-overs from the internal codebase, scheduled for 0.1.1)
+### Known issues (carry-overs from the internal codebase, scheduled for 0.2.1)
 
 - **`require-key`** — `createShortHash` uses the regex `/[^a-zA-Z0-9/W+]/g` which is almost certainly a typo for `\W`. The current implementation preserves the typo for byte-equivalent behaviour with the internal version. Fix planned: replace with `/[^a-zA-Z0-9]/g`. Behaviour change: a small set of base64-encoded hashes will differ.
 - **`require-key`** — the rule looks for `comment` inside `params` (`t('k', 'msg', { params: { comment } })` and `<T params={{ comment }} />`), while `prefer-string-arguments` autofixes `comment` as a sibling of `key`/`defaultValue`. The two locations are inconsistent; a single canonical location should be decided.
