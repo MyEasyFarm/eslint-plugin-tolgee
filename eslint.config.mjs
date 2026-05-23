@@ -18,7 +18,7 @@ export default [
       },
     },
     rules: {
-      ...eslintPlugin.configs['flat/recommended'].rules,
+      ...eslintPlugin.configs.recommended.rules,
     },
   },
   {
