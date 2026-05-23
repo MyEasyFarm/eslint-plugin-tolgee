@@ -8,8 +8,9 @@ ESLint 9 flat-config plugin (`@myeasyfarm/eslint-plugin-tolgee`) shipping three 
 
 ## Commands
 
-- `npm run validate` — lint + typecheck + test. Always run this before committing; the individual scripts are not a substitute.
+- `npm run validate` — format:check + lint + typecheck + test. Always run this before committing; the individual scripts are not a substitute.
 - `npm test` — vitest run (one-shot). `npm run test:watch` for watch mode.
+- `npm run format` — `oxfmt` writes `src/` and `tests/` in place. `npm run format:check` verifies without writing (run by `validate`).
 - `npm run build` — `tsdown` bundle into `dist/`. Has a post-build hook that renames `index-*.d.ts` to `index.d.ts`.
 
 ## Adding or changing a rule (test-first)

@@ -19,10 +19,10 @@ run({
 
   valid: [
     { code: `t('abc', 'Hello')` },
-    { code: 't(`abc`, \'Hello\')' },
+    { code: "t(`abc`, 'Hello')" },
     { code: `tolgee.t('abc', 'Hello')` },
     { code: `t({ key: 'abc', defaultValue: 'Hello' })` },
-    { code: 't({ key: `abc`, defaultValue: \'Hello\' })' },
+    { code: "t({ key: `abc`, defaultValue: 'Hello' })" },
     { code: `<T keyName="abc" defaultValue="Hello" />` },
     { code: `<T keyName={'abc'} defaultValue="Hello" />` },
     { code: '<T keyName={`abc`} defaultValue="Hello" />' },
@@ -37,7 +37,7 @@ run({
       errors: [{ messageId: 'dynamicKeyInCall' }],
     },
     {
-      code: 't(`pre-${id}`, \'Hello\')',
+      code: "t(`pre-${id}`, 'Hello')",
       errors: [{ messageId: 'dynamicKeyInCall' }],
     },
     {
@@ -70,7 +70,7 @@ run({
       errors: [{ messageId: 'dynamicKeyInObject' }],
     },
     {
-      code: 't({ key: `pre-${id}`, defaultValue: \'Hello\' })',
+      code: "t({ key: `pre-${id}`, defaultValue: 'Hello' })",
       errors: [{ messageId: 'dynamicKeyInObject' }],
     },
     {

@@ -59,7 +59,7 @@ Member-access patterns like `t(KEYS.greeting, …)` are reported. Tolgee's CLI e
 
 ## Interaction with `tolgee/require-key`
 
-This rule reports the *shape* of the key argument. `tolgee/require-key` reports *presence* and *hash correctness*. A call like `t(KEY)` (dynamic key, no default value) is reported only by this rule — `require-key`'s presence check assumes a literal first argument.
+This rule reports the _shape_ of the key argument. `tolgee/require-key` reports _presence_ and _hash correctness_. A call like `t(KEY)` (dynamic key, no default value) is reported only by this rule — `require-key`'s presence check assumes a literal first argument.
 
 ## Options
 
@@ -67,8 +67,8 @@ This rule has no options.
 
 ## Message IDs
 
-| ID | When it fires |
-|---|---|
-| `dynamicKeyInCall` | Positional form: first arg is not a string literal |
-| `dynamicKeyInObject` | Object form: `key` property value is not a string literal |
-| `dynamicKeyInComponent` | `<T>` `keyName` prop value is not a string literal |
+| ID                      | When it fires                                             |
+| ----------------------- | --------------------------------------------------------- |
+| `dynamicKeyInCall`      | Positional form: first arg is not a string literal        |
+| `dynamicKeyInObject`    | Object form: `key` property value is not a string literal |
+| `dynamicKeyInComponent` | `<T>` `keyName` prop value is not a string literal        |

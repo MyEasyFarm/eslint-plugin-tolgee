@@ -47,9 +47,12 @@ const rule: Rule.RuleModule = {
     fixable: 'code',
     schema: [],
     messages: {
-      missingObjectKeyProp: 'Translation function must have a non-empty key prop inside props object',
-      missingObjectDefaultValueProp: 'Translation function must have a non-empty defaultValue prop inside props object',
-      invalidObjectKeyValueProp: 'Translation function key prop inside props object must be valid hash value',
+      missingObjectKeyProp:
+        'Translation function must have a non-empty key prop inside props object',
+      missingObjectDefaultValueProp:
+        'Translation function must have a non-empty defaultValue prop inside props object',
+      invalidObjectKeyValueProp:
+        'Translation function key prop inside props object must be valid hash value',
       missingLiteralKeyProp: 'Translation function must have a non-empty key arg',
       missingLiteralDefaultValueProp: 'Translation function must have a non-empty defaultValue arg',
       invalidLiteralKeyValueProp: 'Translation function key arg must be valid hash value',
@@ -70,7 +73,9 @@ const rule: Rule.RuleModule = {
             )
             const paramsField = node.arguments?.filter((a: any) => a.type === 'ObjectExpression')
             const commentField = paramsField.length
-              ? paramsField[0].properties.filter((a: any) => a.type === 'Property' && a.key.name === 'comment')
+              ? paramsField[0].properties.filter(
+                  (a: any) => a.type === 'Property' && a.key.name === 'comment',
+                )
               : []
             const commentValue = commentField.length ? commentField[0].value.value : ''
             if (literalProps.length < 2) {
@@ -98,7 +103,9 @@ const rule: Rule.RuleModule = {
               const literalKeyValue = (arg.value as string).trim()
               const literalDefaultMessageValue = getDefaultValue(node.arguments[1])
               const literalValueToHash = `${literalDefaultMessageValue}${commentValue}`
-              const literalDefaultMessageHashValue = literalValueToHash ? createShortHash(literalValueToHash) : ''
+              const literalDefaultMessageHashValue = literalValueToHash
+                ? createShortHash(literalValueToHash)
+                : ''
 
               if (!literalKeyValue) {
                 context.report({
@@ -106,7 +113,10 @@ const rule: Rule.RuleModule = {
                   messageId: 'missingLiteralKeyProp',
                   fix(fixer) {
                     const insertPos = arg.range
-                    return fixer.replaceTextRange([insertPos[0], insertPos[1]], `'${literalDefaultMessageHashValue}'`)
+                    return fixer.replaceTextRange(
+                      [insertPos[0], insertPos[1]],
+                      `'${literalDefaultMessageHashValue}'`,
+                    )
                   },
                 })
               } else {
@@ -116,7 +126,10 @@ const rule: Rule.RuleModule = {
                     messageId: 'invalidLiteralKeyValueProp',
                     fix(fixer) {
                       const insertPos = arg.range
-                      return fixer.replaceTextRange([insertPos[0], insertPos[1]], `'${literalDefaultMessageHashValue}'`)
+                      return fixer.replaceTextRange(
+                        [insertPos[0], insertPos[1]],
+                        `'${literalDefaultMessageHashValue}'`,
+                      )
                     },
                   })
                 }
@@ -127,14 +140,20 @@ const rule: Rule.RuleModule = {
             const objectPropNames = arg.properties?.map((a: any) => a.key.name)
             const defaultMessageIndex = objectPropNames.indexOf('defaultValue')
             const defaultMessageValue =
-              defaultMessageIndex !== -1 ? getDefaultValue(arg.properties[defaultMessageIndex].value) : ''
+              defaultMessageIndex !== -1
+                ? getDefaultValue(arg.properties[defaultMessageIndex].value)
+                : ''
             const paramsField = arg.properties?.filter((a: any) => a.key.name === 'params')
             const commentField = paramsField.length
-              ? paramsField[0].value.properties.filter((a: any) => a.type === 'Property' && a.key.name === 'comment')
+              ? paramsField[0].value.properties.filter(
+                  (a: any) => a.type === 'Property' && a.key.name === 'comment',
+                )
               : []
             const commentValue = commentField.length ? commentField[0].value.value : ''
             const objectValueToHash = `${defaultMessageValue}${commentValue}`
-            const objectDefaultMessageHashValue = objectValueToHash ? createShortHash(objectValueToHash) : ''
+            const objectDefaultMessageHashValue = objectValueToHash
+              ? createShortHash(objectValueToHash)
+              : ''
 
             if (!checkPropNames(objectPropNames, 'defaultValue')) {
               context.report({
@@ -165,7 +184,10 @@ const rule: Rule.RuleModule = {
                   messageId: 'missingObjectKeyProp',
                   fix(fixer) {
                     const insertPos = arg.properties[objectKeyIndex].value.range
-                    return fixer.replaceTextRange([insertPos[0], insertPos[1]], `'${objectDefaultMessageHashValue}'`)
+                    return fixer.replaceTextRange(
+                      [insertPos[0], insertPos[1]],
+                      `'${objectDefaultMessageHashValue}'`,
+                    )
                   },
                 })
               }
@@ -175,7 +197,10 @@ const rule: Rule.RuleModule = {
                   messageId: 'invalidObjectKeyValueProp',
                   fix(fixer) {
                     const insertPos = arg.properties[objectKeyIndex].value.range
-                    return fixer.replaceTextRange([insertPos[0], insertPos[1]], `'${objectDefaultMessageHashValue}'`)
+                    return fixer.replaceTextRange(
+                      [insertPos[0], insertPos[1]],
+                      `'${objectDefaultMessageHashValue}'`,
+                    )
                   },
                 })
               }
@@ -189,7 +214,9 @@ const rule: Rule.RuleModule = {
           const propNames = node.attributes?.map((a: any) => a.name?.name)
           const defaultMessageIndex = propNames.indexOf('defaultValue')
           const defaultMessageValue =
-            defaultMessageIndex !== -1 ? getDefaultValueJSX(node.attributes[defaultMessageIndex].value) : ''
+            defaultMessageIndex !== -1
+              ? getDefaultValueJSX(node.attributes[defaultMessageIndex].value)
+              : ''
           const paramsField = node.attributes?.filter((a: any) => a.name?.name === 'params')
           const commentField = paramsField.length
             ? paramsField[0].value.expression.properties.filter(
@@ -213,7 +240,10 @@ const rule: Rule.RuleModule = {
               messageId: 'missingKeyInComponent',
               fix(fixer) {
                 const insertPos = node.name.range[1]
-                return fixer.insertTextBeforeRange([insertPos, insertPos], ` keyName="${defaultMessageHashValue}"`)
+                return fixer.insertTextBeforeRange(
+                  [insertPos, insertPos],
+                  ` keyName="${defaultMessageHashValue}"`,
+                )
               },
             })
           }
@@ -227,7 +257,10 @@ const rule: Rule.RuleModule = {
                 messageId: 'missingKeyInComponent',
                 fix(fixer) {
                   const insertPos = node.attributes[keyIndex].value.range
-                  return fixer.replaceTextRange([insertPos[0], insertPos[1]], `"${defaultMessageHashValue}"`)
+                  return fixer.replaceTextRange(
+                    [insertPos[0], insertPos[1]],
+                    `"${defaultMessageHashValue}"`,
+                  )
                 },
               })
             }
@@ -237,7 +270,10 @@ const rule: Rule.RuleModule = {
                 messageId: 'invalidKeyInComponent',
                 fix(fixer) {
                   const insertPos = node.attributes[keyIndex].value.range
-                  return fixer.replaceTextRange([insertPos[0], insertPos[1]], `"${defaultMessageHashValue}"`)
+                  return fixer.replaceTextRange(
+                    [insertPos[0], insertPos[1]],
+                    `"${defaultMessageHashValue}"`,
+                  )
                 },
               })
             }

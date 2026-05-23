@@ -30,6 +30,6 @@ This rule has no options.
 
 ## Message IDs
 
-| ID | When it fires |
-|---|---|
+| ID                      | When it fires                                                                        |
+| ----------------------- | ------------------------------------------------------------------------------------ |
 | `preferStringArguments` | A `t()` or `tolgee.t()` call uses the object form with both `key` and `defaultValue` |

@@ -28,12 +28,16 @@ const rule: Rule.RuleModule = {
 
             const keyProp = properties.find(
               (prop: any) =>
-                prop.type === 'Property' && prop.key.type === 'Identifier' && prop.key.name === 'key',
+                prop.type === 'Property' &&
+                prop.key.type === 'Identifier' &&
+                prop.key.name === 'key',
             )
 
             const defaultValueProp = properties.find(
               (prop: any) =>
-                prop.type === 'Property' && prop.key.type === 'Identifier' && prop.key.name === 'defaultValue',
+                prop.type === 'Property' &&
+                prop.key.type === 'Identifier' &&
+                prop.key.name === 'defaultValue',
             )
 
             if (keyProp && defaultValueProp) {
@@ -56,7 +60,9 @@ const rule: Rule.RuleModule = {
 
               const paramsProp = otherProps.find(
                 (prop: any) =>
-                  prop.type === 'Property' && prop.key.type === 'Identifier' && prop.key.name === 'params',
+                  prop.type === 'Property' &&
+                  prop.key.type === 'Identifier' &&
+                  prop.key.name === 'params',
               )
 
               context.report({
@@ -70,7 +76,8 @@ const rule: Rule.RuleModule = {
                   if (defaultValueProp.value.type === 'TemplateLiteral') {
                     defaultValuePart = defaultValueText
                   } else {
-                    const defaultValueHasSingleQuote = defaultValueText && defaultValueText.includes("'")
+                    const defaultValueHasSingleQuote =
+                      defaultValueText && defaultValueText.includes("'")
                     const defaultValueQuote = defaultValueHasSingleQuote ? '"' : "'"
                     defaultValuePart = `${defaultValueQuote}${defaultValueText}${defaultValueQuote}`
                   }
@@ -100,7 +107,10 @@ const rule: Rule.RuleModule = {
                     } else {
                       const otherPropsText = context.sourceCode
                         .getText()
-                        .substring(otherProps[0].range[0], otherProps[otherProps.length - 1].range[1])
+                        .substring(
+                          otherProps[0].range[0],
+                          otherProps[otherProps.length - 1].range[1],
+                        )
 
                       fixedCode += `, { ${otherPropsText} }`
                     }

@@ -43,7 +43,6 @@ tolgee.t('S2gJZD', 'Hello world')
 t({ key: 'S2gJZD', defaultValue: 'Hello world' })
 t('S2gJZD', 'Hello world', { name: 'John' })
 t('xRzKpH', 'This is a test', { comment: 'Context for translators' })
-
 ;<T keyName="S2gJZD" defaultValue="Hello world" />
 ;<T keyName="S2gJZD" defaultValue={'Hello world'} />
 ;<T keyName="S2gJZD" defaultValue="Hello world" params={{ name: 'John' }} />
@@ -55,14 +54,14 @@ This rule has no options.
 
 ## Message IDs
 
-| ID | When it fires |
-|---|---|
-| `missingLiteralKeyProp` | Positional form: key argument is missing or empty |
-| `missingLiteralDefaultValueProp` | Positional form: defaultValue argument is missing |
-| `invalidLiteralKeyValueProp` | Positional form: key does not match the expected hash |
-| `missingObjectKeyProp` | Object form: `key` property missing or empty |
-| `missingObjectDefaultValueProp` | Object form: `defaultValue` property missing |
-| `invalidObjectKeyValueProp` | Object form: `key` does not match the expected hash |
-| `missingKeyInComponent` | `<T>` missing or empty `keyName` |
-| `missingDefaultValueInComponent` | `<T>` missing `defaultValue` |
-| `invalidKeyInComponent` | `<T>` `keyName` does not match the expected hash |
+| ID                               | When it fires                                         |
+| -------------------------------- | ----------------------------------------------------- |
+| `missingLiteralKeyProp`          | Positional form: key argument is missing or empty     |
+| `missingLiteralDefaultValueProp` | Positional form: defaultValue argument is missing     |
+| `invalidLiteralKeyValueProp`     | Positional form: key does not match the expected hash |
+| `missingObjectKeyProp`           | Object form: `key` property missing or empty          |
+| `missingObjectDefaultValueProp`  | Object form: `defaultValue` property missing          |
+| `invalidObjectKeyValueProp`      | Object form: `key` does not match the expected hash   |
+| `missingKeyInComponent`          | `<T>` missing or empty `keyName`                      |
+| `missingDefaultValueInComponent` | `<T>` missing `defaultValue`                          |
+| `invalidKeyInComponent`          | `<T>` `keyName` does not match the expected hash      |

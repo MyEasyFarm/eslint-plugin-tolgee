@@ -92,7 +92,10 @@ run({
       // verifyFixChanges is disabled to allow the assertion against the documented one-pass output.
       code: `t({ key: 'wrongkey' })`,
       output: `t({ key: '' })`,
-      errors: [{ messageId: 'missingObjectDefaultValueProp' }, { messageId: 'invalidObjectKeyValueProp' }],
+      errors: [
+        { messageId: 'missingObjectDefaultValueProp' },
+        { messageId: 'invalidObjectKeyValueProp' },
+      ],
       recursive: false,
       verifyFixChanges: false,
       verifyAfterFix: false,
@@ -116,7 +119,10 @@ run({
       // Known issue (see CHANGELOG [Unreleased]): same root cause as Invalid #7.
       code: `<T keyName="wrongkey" />`,
       output: `<T keyName="" />`,
-      errors: [{ messageId: 'missingDefaultValueInComponent' }, { messageId: 'invalidKeyInComponent' }],
+      errors: [
+        { messageId: 'missingDefaultValueInComponent' },
+        { messageId: 'invalidKeyInComponent' },
+      ],
       recursive: false,
       verifyFixChanges: false,
       verifyAfterFix: false,
