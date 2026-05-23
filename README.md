@@ -39,6 +39,7 @@ export default [
       'tolgee/no-dynamic-key': 'error',
       'tolgee/enforce-placeholders': 'error',
       'tolgee/no-unused-placeholder-params': 'error',
+      'tolgee/no-tag-interpolation-in-t-call': 'error',
     },
   },
 ]
@@ -61,12 +62,13 @@ export default [tolgee.configs.recommended]
 | [`tolgee/no-dynamic-key`](./docs/rules/no-dynamic-key.md)                               | Requires the translation key to be a string literal at the call site.                         |   ❌    |
 | [`tolgee/enforce-placeholders`](./docs/rules/enforce-placeholders.md)                   | Requires every ICU placeholder in `defaultValue` to have a matching key in the params object. |   ❌    |
 | [`tolgee/no-unused-placeholder-params`](./docs/rules/no-unused-placeholder-params.md)   | Reports params keys that are not referenced as ICU placeholders in `defaultValue`.            |   ❌    |
+| [`tolgee/no-tag-interpolation-in-t-call`](./docs/rules/no-tag-interpolation-in-t-call.md) | Disallows JSX values in the `params` of `t()` / `tolgee.t()`; tag interpolation works only on `<T>`. |   ❌    |
 
 ## Configs
 
-| Config        | Contents                   |
-| ------------- | -------------------------- |
-| `recommended` | All five rules at `error`. |
+| Config        | Contents                  |
+| ------------- | ------------------------- |
+| `recommended` | All six rules at `error`. |
 
 ## Contributing
 
