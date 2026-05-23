@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Added
 
+- **`tolgee/enforce-placeholders`** — new rule that flags missing params keys for ICU placeholders referenced in `defaultValue`. Mirrors `formatjs/enforce-placeholders`. Covers `t()`, `tolgee.t()`, and `<T>`. Recognises `comment` as a reserved Tolgee meta key; user can extend via the `ignoreList` option. Non-fixable (runtime values can't be invented). Conservative under spreads, non-literal params, and `TemplateLiteral`s with expressions. Enabled in `recommended` at `error`.
 - **`tolgee/no-dynamic-key`** — new rule that requires the translation key to be a string literal at the call site. Identifiers, member expressions (`KEYS.greeting`), function calls, concatenations, conditionals, and template literals with interpolations are reported. Covers `t()`, `tolgee.t()`, and `<T keyName=…>`. Non-fixable. Enabled in `recommended` at `error`.
 
 ### Changed

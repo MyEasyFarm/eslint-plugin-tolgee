@@ -37,6 +37,7 @@ export default [
       'tolgee/require-key': 'error',
       'tolgee/prefer-string-arguments': 'error',
       'tolgee/no-dynamic-key': 'error',
+      'tolgee/enforce-placeholders': 'error',
     },
   },
 ]
@@ -52,17 +53,18 @@ export default [tolgee.configs.recommended]
 
 ## Rules
 
-| Rule                                                                        | Description                                                              | Autofix |
-| --------------------------------------------------------------------------- | ------------------------------------------------------------------------ | :-----: |
-| [`tolgee/require-key`](./docs/rules/require-key.md)                         | Enforces a non-empty hash-derived key on `t()`, `tolgee.t()`, and `<T>`. |   ✅    |
-| [`tolgee/prefer-string-arguments`](./docs/rules/prefer-string-arguments.md) | Rewrites `t({ key, defaultValue })` to `t(key, defaultValue)`.           |   ✅    |
-| [`tolgee/no-dynamic-key`](./docs/rules/no-dynamic-key.md)                   | Requires the translation key to be a string literal at the call site.    |   ❌    |
+| Rule                                                                        | Description                                                                                   | Autofix |
+| --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | :-----: |
+| [`tolgee/require-key`](./docs/rules/require-key.md)                         | Enforces a non-empty hash-derived key on `t()`, `tolgee.t()`, and `<T>`.                      |   ✅    |
+| [`tolgee/prefer-string-arguments`](./docs/rules/prefer-string-arguments.md) | Rewrites `t({ key, defaultValue })` to `t(key, defaultValue)`.                                |   ✅    |
+| [`tolgee/no-dynamic-key`](./docs/rules/no-dynamic-key.md)                   | Requires the translation key to be a string literal at the call site.                         |   ❌    |
+| [`tolgee/enforce-placeholders`](./docs/rules/enforce-placeholders.md)       | Requires every ICU placeholder in `defaultValue` to have a matching key in the params object. |   ❌    |
 
 ## Configs
 
-| Config        | Contents                    |
-| ------------- | --------------------------- |
-| `recommended` | All three rules at `error`. |
+| Config        | Contents                   |
+| ------------- | -------------------------- |
+| `recommended` | All four rules at `error`. |
 
 ## Contributing
 
