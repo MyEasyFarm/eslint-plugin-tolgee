@@ -1,0 +1,43 @@
+name: Release and Publish
+on:
+  push:
+    tags:
+      - 'v*'
+jobs:
+  release-and-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: npm run validate
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          VERSION=$(node -p "require('./package.json').version")
+
+          if [[ "$VERSION" == *"-"* ]]; then
+            PRERELEASE="--prerelease"
+          else
+            PRERELEASE=""
+          fi
+
+          gh release create "$TAG_NAME" \
+            --title "$TAG_NAME" \
+            --generate-notes \
+            $PRERELEASE
+      - name: Publish to npm
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if [[ "$VERSION" == *"-"* ]]; then
+            npm publish --access public --tag beta
+          else
+            npm publish --access public
+          fi
