@@ -40,6 +40,7 @@ export default [
       'tolgee/enforce-placeholders': 'error',
       'tolgee/no-unused-placeholder-params': 'error',
       'tolgee/no-tag-interpolation-in-t-call': 'error',
+      'tolgee/no-self-closing-tags': 'error',
     },
   },
 ]
@@ -63,12 +64,13 @@ export default [tolgee.configs.recommended]
 | [`tolgee/enforce-placeholders`](./docs/rules/enforce-placeholders.md)                   | Requires every ICU placeholder in `defaultValue` to have a matching key in the params object. |   ❌    |
 | [`tolgee/no-unused-placeholder-params`](./docs/rules/no-unused-placeholder-params.md)   | Reports params keys that are not referenced as ICU placeholders in `defaultValue`.            |   ❌    |
 | [`tolgee/no-tag-interpolation-in-t-call`](./docs/rules/no-tag-interpolation-in-t-call.md) | Disallows JSX values in the `params` of `t()` / `tolgee.t()`; tag interpolation works only on `<T>`. |   ❌    |
+| [`tolgee/no-self-closing-tags`](./docs/rules/no-self-closing-tags.md)                   | Disallows `<name/>` inside translation defaults — Tolgee does not parse self-closing tags. Autofixes to `<name></name>`. |   ✅    |
 
 ## Configs
 
-| Config        | Contents                  |
-| ------------- | ------------------------- |
-| `recommended` | All six rules at `error`. |
+| Config        | Contents                    |
+| ------------- | --------------------------- |
+| `recommended` | All seven rules at `error`. |
 
 ## Contributing
 
