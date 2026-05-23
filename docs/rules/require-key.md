@@ -1,4 +1,4 @@
-# `tolgee/require-tolgee-key`
+# `tolgee/require-key`
 
 Ensures every Tolgee translation call carries a non-empty key derived from its default value. Covers `t()`, `tolgee.t()`, and the `<T>` component. Autofixable.
 

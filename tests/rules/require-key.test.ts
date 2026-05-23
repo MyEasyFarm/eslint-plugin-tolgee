@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto'
 import * as tseslintParser from '@typescript-eslint/parser'
 import { run } from 'eslint-vitest-rule-tester'
 
-import rule from '../../src/rules/require-tolgee-key.js'
+import rule from '../../src/rules/require-key.js'
 
 function createShortHash(input: string): string {
   const hash = createHash('sha512').update(input).digest('base64')
@@ -20,7 +20,7 @@ const commentText = 'Context for translators'
 const withCommentHash = createShortHash(`${withCommentMessage}${commentText}`)
 
 run({
-  name: 'require-tolgee-key',
+  name: 'require-key',
   rule: rule as never,
   languageOptions: {
     parser: tseslintParser as never,

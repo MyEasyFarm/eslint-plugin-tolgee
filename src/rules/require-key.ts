@@ -2,6 +2,8 @@ import { createHash } from 'node:crypto'
 
 import type { Rule } from 'eslint'
 
+import { isTComponent, isTranslationCall } from '../utils/isTranslationCall.js'
+
 function createShortHash(input: string): string {
   const hash = createHash('sha512').update(input).digest('base64')
   const cleanedHash = hash.replace(/[^a-zA-Z0-9/W+]/g, '')
@@ -40,7 +42,7 @@ const rule: Rule.RuleModule = {
     type: 'problem',
     docs: {
       description: 'Ensure `t()` or `tolgee.t()` has a translation key and `<T>` has `keyName`.',
-      url: 'https://github.com/MyEasyFarm/eslint-plugin-tolgee/blob/main/docs/rules/require-tolgee-key.md',
+      url: 'https://github.com/MyEasyFarm/eslint-plugin-tolgee/blob/main/docs/rules/require-key.md',
     },
     fixable: 'code',
     schema: [],
@@ -60,12 +62,7 @@ const rule: Rule.RuleModule = {
   create(context: Rule.RuleContext): Rule.RuleListener {
     return {
       CallExpression(node: any) {
-        if (
-          (node.callee.type === 'Identifier' && node.callee.name === 't') ||
-          (node.callee.type === 'MemberExpression' &&
-            node.callee.object.name === 'tolgee' &&
-            node.callee.property.name === 't')
-        ) {
+        if (isTranslationCall(node.callee)) {
           const arg = node.arguments[0]
           if (arg && (arg.type === 'Literal' || arg.type === 'TemplateLiteral')) {
             const literalProps = node.arguments?.filter(
@@ -188,7 +185,7 @@ const rule: Rule.RuleModule = {
       },
 
       JSXOpeningElement(node: any) {
-        if (node.name.type === 'JSXIdentifier' && node.name.name === 'T') {
+        if (isTComponent(node.name)) {
           const propNames = node.attributes?.map((a: any) => a.name?.name)
           const defaultMessageIndex = propNames.indexOf('defaultValue')
           const defaultMessageValue =

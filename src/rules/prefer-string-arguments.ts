@@ -1,5 +1,7 @@
 import type { Rule } from 'eslint'
 
+import { isTranslationCall } from '../utils/isTranslationCall.js'
+
 const rule: Rule.RuleModule = {
   meta: {
     type: 'suggestion',
@@ -18,12 +20,7 @@ const rule: Rule.RuleModule = {
   create(context: Rule.RuleContext): Rule.RuleListener {
     return {
       CallExpression(node: any) {
-        if (
-          (node.callee.type === 'Identifier' && node.callee.name === 't') ||
-          (node.callee.type === 'MemberExpression' &&
-            node.callee.object.name === 'tolgee' &&
-            node.callee.property.name === 't')
-        ) {
+        if (isTranslationCall(node.callee)) {
           const arg = node.arguments[0]
 
           if (arg && arg.type === 'ObjectExpression') {

@@ -1,6 +1,6 @@
 # @myeasyfarm/eslint-plugin-tolgee
 
-ESLint rules for [Tolgee](https://tolgee.io) i18n. Catches missing translation keys and standardises `t()` call shape across a codebase.
+ESLint rules for [Tolgee](https://tolgee.io) i18n. Catches missing or dynamic translation keys and standardises `t()` call shape across a codebase.
 
 ## Install
 
@@ -34,8 +34,9 @@ export default [
       tolgee,
     },
     rules: {
-      'tolgee/require-tolgee-key': 'error',
+      'tolgee/require-key': 'error',
       'tolgee/prefer-string-arguments': 'error',
+      'tolgee/no-dynamic-key': 'error',
     },
   },
 ]
@@ -53,14 +54,15 @@ export default [tolgee.configs.recommended]
 
 | Rule | Description | Autofix |
 |---|---|:-:|
-| [`tolgee/require-tolgee-key`](./docs/rules/require-tolgee-key.md) | Enforces a non-empty hash-derived key on `t()`, `tolgee.t()`, and `<T>`. | ✅ |
+| [`tolgee/require-key`](./docs/rules/require-key.md) | Enforces a non-empty hash-derived key on `t()`, `tolgee.t()`, and `<T>`. | ✅ |
 | [`tolgee/prefer-string-arguments`](./docs/rules/prefer-string-arguments.md) | Rewrites `t({ key, defaultValue })` to `t(key, defaultValue)`. | ✅ |
+| [`tolgee/no-dynamic-key`](./docs/rules/no-dynamic-key.md) | Requires the translation key to be a string literal at the call site. | ❌ |
 
 ## Configs
 
 | Config | Contents |
 |---|---|
-| `recommended` | Both rules at `error`. |
+| `recommended` | All three rules at `error`. |
 
 ## Contributing
 

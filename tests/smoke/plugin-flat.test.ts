@@ -14,8 +14,9 @@ describe('plugin (flat config smoke test)', () => {
   it('exposes meta, rules, and recommended config', () => {
     expect(plugin.meta.name).toBe('@myeasyfarm/eslint-plugin-tolgee')
     expect(plugin.meta.version).toBe('0.1.0')
-    expect(plugin.rules).toHaveProperty('require-tolgee-key')
+    expect(plugin.rules).toHaveProperty('require-key')
     expect(plugin.rules).toHaveProperty('prefer-string-arguments')
+    expect(plugin.rules).toHaveProperty('no-dynamic-key')
     expect(plugin.configs.recommended).toBeDefined()
   })
 
@@ -34,14 +35,16 @@ describe('plugin (flat config smoke test)', () => {
         },
       },
       rules: {
-        'tolgee/require-tolgee-key': 'error',
+        'tolgee/require-key': 'error',
         'tolgee/prefer-string-arguments': 'error',
+        'tolgee/no-dynamic-key': 'error',
       },
     })
 
     const ruleIds = messages.map((m) => m.ruleId)
-    expect(ruleIds).toContain('tolgee/require-tolgee-key')
+    expect(ruleIds).toContain('tolgee/require-key')
     expect(ruleIds).toContain('tolgee/prefer-string-arguments')
-    expect(messages.length).toBeGreaterThanOrEqual(3)
+    expect(ruleIds).toContain('tolgee/no-dynamic-key')
+    expect(messages.length).toBeGreaterThanOrEqual(4)
   })
 })

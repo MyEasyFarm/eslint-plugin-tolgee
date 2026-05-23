@@ -1,5 +1,6 @@
+import noDynamicKey from './rules/no-dynamic-key.js'
 import preferStringArguments from './rules/prefer-string-arguments.js'
-import requireTolgeeKey from './rules/require-tolgee-key.js'
+import requireKey from './rules/require-key.js'
 
 const plugin = {
   meta: {
@@ -7,8 +8,9 @@ const plugin = {
     version: '0.1.0',
   },
   rules: {
-    'require-tolgee-key': requireTolgeeKey,
+    'require-key': requireKey,
     'prefer-string-arguments': preferStringArguments,
+    'no-dynamic-key': noDynamicKey,
   },
   configs: {} as Record<string, unknown>,
 }
@@ -18,8 +20,9 @@ plugin.configs.recommended = {
     tolgee: plugin,
   },
   rules: {
-    'tolgee/require-tolgee-key': 'error',
+    'tolgee/require-key': 'error',
     'tolgee/prefer-string-arguments': 'error',
+    'tolgee/no-dynamic-key': 'error',
   },
 }
 
