@@ -40,7 +40,7 @@ const rule: Rule.RuleModule = {
     type: 'problem',
     docs: {
       description: 'Ensure `t()` or `tolgee.t()` has a translation key and `<T>` has `keyName`.',
-      url: 'https://github.com/MyEasyFarm/tolgee-eslint-plugin/blob/main/docs/rules/require-tolgee-key.md',
+      url: 'https://github.com/MyEasyFarm/eslint-plugin-tolgee/blob/main/docs/rules/require-tolgee-key.md',
     },
     fixable: 'code',
     schema: [],

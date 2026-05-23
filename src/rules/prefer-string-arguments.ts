@@ -5,7 +5,7 @@ const rule: Rule.RuleModule = {
     type: 'suggestion',
     docs: {
       description: 'Prefer string arguments in t() function instead of object props',
-      url: 'https://github.com/MyEasyFarm/tolgee-eslint-plugin/blob/main/docs/rules/prefer-string-arguments.md',
+      url: 'https://github.com/MyEasyFarm/eslint-plugin-tolgee/blob/main/docs/rules/prefer-string-arguments.md',
     },
     fixable: 'code',
     schema: [],

@@ -1,5 +1,5 @@
 {
-  "name": "@MyEasyFarm/tolgee-eslint-plugin",
+  "name": "@myeasyfarm/eslint-plugin-tolgee",
   "version": "0.1.0",
   "description": "ESLint rules for Tolgee i18n — enforce translation keys and string-argument t() calls.",
   "license": "MIT",
@@ -31,12 +31,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MyEasyFarm/tolgee-eslint-plugin.git"
+    "url": "git+https://github.com/MyEasyFarm/eslint-plugin-tolgee.git"
   },
   "bugs": {
-    "url": "https://github.com/MyEasyFarm/tolgee-eslint-plugin/issues"
+    "url": "https://github.com/MyEasyFarm/eslint-plugin-tolgee/issues"
   },
-  "homepage": "https://github.com/MyEasyFarm/tolgee-eslint-plugin#readme",
+  "homepage": "https://github.com/MyEasyFarm/eslint-plugin-tolgee#readme",
   "peerDependencies": {
     "eslint": ">=9 <10"
   },
