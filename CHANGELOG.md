@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+## [0.2.1] — 2026-05-25
+
+### Fixed
+
+- **package.json entrypoints** — `main`, `types`, and `exports` were pointing at `./dist/index.js` / `./dist/index.d.ts`, but the tarball ships `./dist/index.mjs` / `./dist/index.d.mts` (tsdown's default ESM output). Consumers could not resolve the package on import. Aligned the manifest with the actual build artifacts.
+
+### Changed
+
+- **build**: removed dead `build:done` rename hook from `tsdown.config.ts` (targeted a hashed `index-*.d.ts` pattern tsdown no longer emits).
+- **build**: migrated tsdown `external: ['eslint']` to `deps: { neverBundle: ['eslint'] }`; the previous form is deprecated. Output byte-identical.
+
 ## [0.2.0] — 2026-05-23
 
 ### Added
