@@ -7,5 +7,7 @@ export default defineConfig({
   clean: true,
   sourcemap: true,
   target: 'node20',
-  external: ['eslint'],
+  deps: {
+    neverBundle: ['eslint'],
+  },
 })
