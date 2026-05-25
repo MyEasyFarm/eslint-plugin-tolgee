@@ -1,6 +1,6 @@
 {
   "name": "@myeasyfarm/eslint-plugin-tolgee",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "ESLint rules for Tolgee i18n — enforce translation keys and string-argument t() calls.",
   "keywords": [
     "eslint",

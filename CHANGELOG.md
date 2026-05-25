@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+## [0.2.2] — 2026-05-25
+
+### Fixed
+
+- **`tolgee/no-unused-placeholder-params`** / **`tolgee/enforce-placeholders`** — `extractIcuPlaceholders` only collected argument names at ICU depth 0 and never scanned for Tolgee's JSX-style tag interpolation, producing false positives on two real-world patterns: (1) `<T defaultValue="Draw <br></br> on map" params={{ br: <br /> }} />` (the JSX-tag interpolation pattern documented in the README and reinforced by `no-self-closing-tags`), and (2) ICU placeholders nested inside `select` / `plural` bodies, e.g. `{allCount, select, 0 {0 items} other {{currentCount} of {allCount}}}`. Rewrote the extractor as a recursive-descent ICU MessageFormat parser that walks into `plural` / `select` / `selectordinal` selector bodies (and treats simple typed arguments — `number`, `date`, … — as opaque) plus a separate JSX-tag pass that collects `<tag>`, `</tag>`, and `<tag/>` names (allowing hyphenated custom-element names like `<my-tag>`). Both rules now report correctly for tag-name and nested-ICU params. Reported by a downstream consumer.
+
 ## [0.2.1] — 2026-05-25
 
 ### Fixed
