@@ -26,6 +26,10 @@ run({
     { code: `t({ key: 'k', defaultValue: 'Hi {a}', params: { a: 1 } })` },
     { code: `<T keyName="k" defaultValue="Hi {a}" params={{ a: 1 }} />` },
     { code: `t('k', '{count, plural, one {one} other {#}}', { count: 1 })` },
+    {
+      code: `t('k', '{allCount, select, 0 {0 items} other {{currentCount} of {allCount}}}', { currentCount: 1, allCount: 2 })`,
+    },
+    { code: `<T keyName="k" defaultValue="Draw <br></br> on map" params={{ br: 1 }} />` },
     { code: `t('k', '{a} {b}', { a: 1, b: 2 })` },
     { code: "t('k', `Hi {a}`, { a: 1 })" },
     { code: `t('k', msg)` },
@@ -73,6 +77,14 @@ run({
     {
       code: `t('k', '{count, plural, one {one} other {#}}', {})`,
       errors: [{ messageId: 'missingPlaceholderKey', data: { name: 'count' } }],
+    },
+    {
+      code: `t('k', '{a, select, 0 {none} other {{b} of {a}}}', { a: 1 })`,
+      errors: [{ messageId: 'missingPlaceholderKey', data: { name: 'b' } }],
+    },
+    {
+      code: `<T keyName="k" defaultValue="Draw <br></br>" params={{}} />`,
+      errors: [{ messageId: 'missingPlaceholderKey', data: { name: 'br' } }],
     },
     {
       code: `tolgee.t('k', 'Hi {name}!')`,
