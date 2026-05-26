@@ -13,11 +13,24 @@ const fixture = readFileSync(fixturePath, 'utf8')
 describe('plugin (flat config smoke test)', () => {
   it('exposes meta, rules, and recommended config', () => {
     expect(plugin.meta.name).toBe('@myeasyfarm/eslint-plugin-tolgee')
-    expect(plugin.meta.version).toBe('0.1.0')
+    expect(plugin.meta.version).toBe('0.2.3')
     expect(plugin.rules).toHaveProperty('require-key')
     expect(plugin.rules).toHaveProperty('prefer-string-arguments')
     expect(plugin.rules).toHaveProperty('no-dynamic-key')
     expect(plugin.configs.recommended).toBeDefined()
+    expect(plugin.configs.recommended.name).toBe('tolgee/recommended')
+  })
+
+  it('exposes a spreadable recommended config', () => {
+    const consumer: Linter.Config = {
+      ...plugin.configs.recommended,
+      name: 'consumer/override',
+      files: ['src/**/*.ts'],
+    }
+    expect(consumer.name).toBe('consumer/override')
+    expect(consumer.files).toEqual(['src/**/*.ts'])
+    expect(consumer.plugins?.tolgee).toBe(plugin)
+    expect(consumer.rules?.['tolgee/require-key']).toBe('error')
   })
 
   it('fires diagnostics on a fixture using flat config', () => {

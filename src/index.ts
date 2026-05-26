@@ -1,3 +1,5 @@
+import type { ESLint, Linter } from 'eslint'
+
 import enforcePlaceholders from './rules/enforce-placeholders.js'
 import noDynamicKey from './rules/no-dynamic-key.js'
 import noSelfClosingTags from './rules/no-self-closing-tags.js'
@@ -9,7 +11,7 @@ import requireKey from './rules/require-key.js'
 const plugin = {
   meta: {
     name: '@myeasyfarm/eslint-plugin-tolgee',
-    version: '0.1.0',
+    version: '0.2.3',
   },
   rules: {
     'require-key': requireKey,
@@ -20,10 +22,11 @@ const plugin = {
     'no-tag-interpolation-in-t-call': noTagInterpolationInTCall,
     'no-self-closing-tags': noSelfClosingTags,
   },
-  configs: {} as Record<string, unknown>,
-}
+  configs: {} as Record<string, Linter.Config>,
+} satisfies ESLint.Plugin
 
 plugin.configs.recommended = {
+  name: 'tolgee/recommended',
   plugins: {
     tolgee: plugin,
   },
