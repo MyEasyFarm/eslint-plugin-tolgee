@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+## [0.2.3] — 2026-05-26
+
+### Fixed
+
+- **types**: `plugin.configs` was emitted as `Record<string, unknown>` in `dist/index.d.mts`, so TypeScript consumers could not spread the preset (`{ ...tolgee.configs.recommended, name, files }` failed with TS2698). The widening came from the source declaring `configs: {} as Record<string, unknown>`. Annotated as `Record<string, Linter.Config>` and applied `satisfies ESLint.Plugin` to the plugin object so the documented spread pattern type-checks without `@ts-expect-error` or `as Linter.Config` casts.
+- **`plugin.meta.version`** — was hard-coded to `0.1.0` since the initial release, so introspection (`plugin.meta.version`) and any ESLint diagnostic that surfaces the plugin version reported a stale value. Now bumped in lockstep with `package.json`.
+
+### Changed
+
+- **`recommended` preset**: now ships a default `name: 'tolgee/recommended'` so ESLint can identify the config block in messages without consumers having to set it. Consumers that override `name` are unaffected (their value wins on spread).
+
 ## [0.2.2] — 2026-05-25
 
 ### Fixed
