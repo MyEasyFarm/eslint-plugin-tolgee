@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+## [0.3.0] — 2026-06-12
+
+### Added
+
+- **`tolgee/prefer-t-function`** — new opt-in rule (not in `recommended`): reports `<T>` components that have a static `keyName`/`defaultValue` and no tag interpolation — sites where `t()` from `useTranslate()` is a drop-in equivalent. Two-tier reporting: `preferTFunctionFixable` autofixes to `t(key, default, { ...params })` when a destructured `const { t } = useTranslate()` binding is innermost-in-scope (shadowing-safe); `preferTFunctionManual` reports for manual conversion when no `t` is in scope (the rule never injects the hook or its import). Deliberately conservative: class components, module-scope literals, plain lowercase functions, anonymous callbacks/HOC-wrapped components, JSX `params`, `ns`/`noWrap`/`language`/`orEmpty` props, spread props, dynamic keys, and template defaults with `${}` expressions are never reported. `<T>` remains required for tag interpolation (see `no-tag-interpolation-in-t-call`).
+
 ## [0.2.3] — 2026-05-26
 
 ### Fixed
