@@ -1,0 +1,216 @@
+import type { Rule } from 'eslint'
+
+import { isTComponent } from '../utils/isTranslationCall.js'
+
+function isJsxValue(node: any): boolean {
+  return node?.type === 'JSXElement' || node?.type === 'JSXFragment'
+}
+
+function isStaticString(node: any): boolean {
+  if (node.type === 'Literal' && typeof node.value === 'string') return true
+  if (node.type === 'TemplateLiteral' && node.expressions.length === 0) return true
+  return false
+}
+
+function findAttribute(node: any, name: string): any {
+  return node.attributes.find((a: any) => a.type === 'JSXAttribute' && a.name?.name === name)
+}
+
+function getComponentContext(node: any): 'component' | 'class' | 'module' | 'plain' | 'uncertain' {
+  let current = node.parent
+  let nearestFunction = true
+  let sawFunction = false
+  while (current) {
+    if (current.type === 'ClassDeclaration' || current.type === 'ClassExpression') {
+      return 'class'
+    }
+    if (
+      current.type === 'FunctionDeclaration' ||
+      current.type === 'FunctionExpression' ||
+      current.type === 'ArrowFunctionExpression'
+    ) {
+      sawFunction = true
+      let name: string | null = null
+      if (current.id?.type === 'Identifier') {
+        name = current.id.name
+      } else if (
+        current.parent?.type === 'VariableDeclarator' &&
+        current.parent.id?.type === 'Identifier'
+      ) {
+        name = current.parent.id.name
+      }
+      // Nearest enclosing function must be named; an anonymous nearest
+      // function (inline callback / HOC arg) is undecidable -> bail.
+      if (name === null) {
+        if (nearestFunction) return 'uncertain'
+      } else {
+        const first = name.charAt(0)
+        // An uppercase-named function anywhere in the enclosing chain marks
+        // a component context; a lowercase nested helper defers to an outer
+        // component if one exists.
+        if (first >= 'A' && first <= 'Z') return 'component'
+      }
+      nearestFunction = false
+    }
+    current = current.parent
+  }
+  return sawFunction ? 'plain' : 'module'
+}
+
+function isUseTranslateBinding(variable: any): boolean {
+  return variable.defs.some(
+    (def: any) =>
+      def.node.type === 'VariableDeclarator' &&
+      def.node.id.type === 'ObjectPattern' &&
+      def.node.id.properties.some(
+        (p: any) =>
+          p.type === 'Property' &&
+          ((p.key.type === 'Identifier' && p.key.name === 't') ||
+            (p.value.type === 'Identifier' && p.value.name === 't')),
+      ) &&
+      def.node.init?.type === 'CallExpression' &&
+      def.node.init.callee.type === 'Identifier' &&
+      def.node.init.callee.name === 'useTranslate',
+  )
+}
+
+function findUseTranslateT(context: Rule.RuleContext, node: any): any {
+  let scope: any = context.sourceCode.getScope(node)
+  while (scope) {
+    const variable = scope.variables.find((v: any) => v.name === 't')
+    if (variable) {
+      return isUseTranslateBinding(variable) ? variable : null
+    }
+    scope = scope.upper
+  }
+  return null
+}
+
+function isJsxChild(el: any): boolean {
+  const p = el.parent
+  return (
+    (p.type === 'JSXElement' || p.type === 'JSXFragment') &&
+    Array.isArray(p.children) &&
+    p.children.includes(el)
+  )
+}
+
+const rule: Rule.RuleModule = {
+  meta: {
+    type: 'suggestion',
+    docs: {
+      description:
+        'Prefer the t() function over the <T> component when the <T> has a static key/default and no tag interpolation.',
+      url: 'https://github.com/MyEasyFarm/eslint-plugin-tolgee/blob/main/docs/rules/prefer-t-function.md',
+    },
+    fixable: 'code',
+    schema: [],
+    messages: {
+      preferTFunctionFixable:
+        "This <T> has no tag interpolation and a static key/default — t('{{key}}', ...) is equivalent here and matches the codebase's dominant t() usage.",
+      preferTFunctionManual:
+        'This <T> has no tag interpolation and a static key/default — prefer t() from useTranslate(). No t binding is in scope here, so this must be converted manually.',
+    },
+  },
+
+  create(context: Rule.RuleContext): Rule.RuleListener {
+    return {
+      JSXOpeningElement(node: any) {
+        if (!isTComponent(node.name)) return
+
+        const el = node.parent
+
+        // 1. Children present
+        const hasNonWhitespaceChild = el.children?.some(
+          (child: any) => !(child.type === 'JSXText' && child.value.trim() === ''),
+        )
+        if (hasNonWhitespaceChild) return
+
+        // 2. Spread props
+        if (node.attributes.some((a: any) => a.type === 'JSXSpreadAttribute')) return
+
+        // 3. ns prop
+        if (findAttribute(node, 'ns')) return
+
+        // 4. noWrap / language / orEmpty props
+        if (
+          findAttribute(node, 'noWrap') ||
+          findAttribute(node, 'language') ||
+          findAttribute(node, 'orEmpty')
+        ) {
+          return
+        }
+
+        // 5. Missing or dynamic keyName
+        const keyAttr = findAttribute(node, 'keyName')
+        if (!keyAttr || !keyAttr.value) return
+        const keyNode =
+          keyAttr.value.type === 'JSXExpressionContainer' ? keyAttr.value.expression : keyAttr.value
+        if (!isStaticString(keyNode)) return
+
+        // 6. JSX in params
+        const paramsAttr = findAttribute(node, 'params')
+        let paramsObj: any = null
+        if (paramsAttr) {
+          paramsObj =
+            paramsAttr.value?.type === 'JSXExpressionContainer' ? paramsAttr.value.expression : null
+          if (paramsObj?.type !== 'ObjectExpression') return
+          if (paramsObj.properties.some((p: any) => p.type === 'Property' && isJsxValue(p.value))) {
+            return
+          }
+        }
+
+        // 7. Non-static defaultValue
+        const dvAttr = findAttribute(node, 'defaultValue')
+        if (!dvAttr || !dvAttr.value) return
+        const dv =
+          dvAttr.value.type === 'JSXExpressionContainer' ? dvAttr.value.expression : dvAttr.value
+        if (!isStaticString(dv)) return
+
+        // 8. Non-component context
+        if (getComponentContext(node) !== 'component') return
+
+        const variable = findUseTranslateT(context, node)
+
+        if (!variable) {
+          context.report({ node: el, messageId: 'preferTFunctionManual' })
+          return
+        }
+
+        const keyRaw = keyNode.type === 'Literal' ? keyNode.value : keyNode.quasis[0].value.cooked
+
+        context.report({
+          node: el,
+          messageId: 'preferTFunctionFixable',
+          data: { key: String(keyRaw) },
+          fix(fixer) {
+            const keyQuote = String(keyRaw).includes("'") ? '"' : "'"
+            const keyText = `${keyQuote}${keyRaw}${keyQuote}`
+
+            let defaultText: string
+            if (dv.type === 'TemplateLiteral') {
+              defaultText = context.sourceCode.getText(dv)
+            } else {
+              const defaultQuote = String(dv.value).includes("'") ? '"' : "'"
+              defaultText = `${defaultQuote}${dv.value}${defaultQuote}`
+            }
+
+            let expr = `t(${keyText}, ${defaultText})`
+            if (paramsObj) {
+              const paramsContent = context.sourceCode
+                .getText()
+                .substring(paramsObj.range[0] + 1, paramsObj.range[1] - 1)
+                .trim()
+              expr = `t(${keyText}, ${defaultText}, { ${paramsContent} })`
+            }
+
+            const replacement = isJsxChild(el) ? `{${expr}}` : expr
+            return fixer.replaceText(el, replacement)
+          },
+        })
+      },
+    }
+  },
+}
+
+export default rule

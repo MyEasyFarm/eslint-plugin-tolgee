@@ -65,6 +65,9 @@ export default [tolgee.configs.recommended]
 | [`tolgee/no-unused-placeholder-params`](./docs/rules/no-unused-placeholder-params.md)   | Reports params keys that are not referenced as ICU placeholders in `defaultValue`.            |   ❌    |
 | [`tolgee/no-tag-interpolation-in-t-call`](./docs/rules/no-tag-interpolation-in-t-call.md) | Disallows JSX values in the `params` of `t()` / `tolgee.t()`; tag interpolation works only on `<T>`. |   ❌    |
 | [`tolgee/no-self-closing-tags`](./docs/rules/no-self-closing-tags.md)                   | Disallows `<name/>` inside translation defaults — Tolgee does not parse self-closing tags. Autofixes to `<name></name>`. |   ✅    |
+| [`tolgee/prefer-t-function`](./docs/rules/prefer-t-function.md)                         | Prefer `t()` over `<T>` for static, tag-free translations (autofix when `t` is in scope). Opt-in — not in `recommended`. |  ✅\*   |
+
+\* Conditional autofix: fixes only when a `const { t } = useTranslate()` binding is already in scope; otherwise reports for manual conversion.
 
 ## Configs
 
