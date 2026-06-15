@@ -12,7 +12,7 @@ import requireKey from './rules/require-key.js'
 const plugin = {
   meta: {
     name: '@myeasyfarm/eslint-plugin-tolgee',
-    version: '0.3.0',
+    version: '0.3.1',
   },
   rules: {
     'require-key': requireKey,

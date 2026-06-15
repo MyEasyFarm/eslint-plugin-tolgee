@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+## [0.3.1] — 2026-06-15
+
+### Fixed
+
+- **`tolgee/prefer-t-function`** — the autofix corrupted any `<T>` whose `params` carried a function-valued (render-prop) tag handler, e.g. `params={{ p: (chunks) => <p>{chunks}</p> }}`. The "has tag interpolation?" guard recognised only JSX-element/fragment param values, so a function-valued handler slipped past it and the fixer flattened the object verbatim into `t('key', 'default', { p: (chunks) => <p>{chunks}</p> })` — output that (1) fails `tsc` (a `t()` `params` value must be `string | number | bigint | boolean | Date | null | undefined`, never a function) and (2) renders the tag markup as escaped literal text at runtime, since `t()` returns a plain string and never invokes the handler. The guard now bails on arrow- and function-valued params as well as JSX, and additionally bails when the `params` object contains a spread (`params={{ ...rest }}`), whose contents can't be statically verified — such `<T>` components are left untouched. This keeps a fixer conservative in the safe direction (it declines to suggest a conversion); the complementary `no-tag-interpolation-in-t-call` rule deliberately stays quiet on function-valued params for the inverse reason — a reporter avoids false-positive errors on functions that legitimately return nodes. Reported by a downstream consumer (8 call sites mis-fixed). **Known limitation (follow-up):** values that only _evaluate_ to an element at runtime — a conditional (`cond ? <a/> : <b/>`) or a variable holding an element — are still not statically detected; keep using `<T>` for any tag interpolation.
+
 ## [0.3.0] — 2026-06-12
 
 ### Added
