@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+## [0.4.0] — 2026-06-15
+
+### Added
+
+- **`tolgee/prefer-hoisted-tag`** — new opt-in rule (not in `recommended`): flags a `<T>` whose entire message is a single, pure, attribute-free wrapper tag re-supplied through a one-key `params` (e.g. `defaultValue="<p>…</p>"` with `params={{ p: <p className="…" /> }}`) and prefers hoisting that tag into code — `<p className="…">{t('key', '…')}</p>` — so the translation is plain text. It fires precisely on the single pure-wrapper tag-param case that `prefer-t-function` deliberately skips, so the two rules are disjoint by construction. **Suggestion by default, never a silent `--fix`:** `t(key, default)` returns the _stored_ Tolgee value (the `default` is only a missing-key fallback), so hoisting the tag in code without stripping the wrapper from stored translation data would make every un-migrated locale render escaped raw markup (`<p>…</p>` as literal text). The required paired Tolgee data migration is stated in both the report message and the suggestion description; set `{ autofix: true }` to promote the transform to a real `--fix`. Detection is conservative: it requires static `keyName`/`defaultValue`, a component context with a `useTranslate()` `t` binding in scope (else `preferHoistedTagManual` reports for manual conversion), exactly one pure-wrapper param (childless `<W…/>` or `(chunks) => <W…>{chunks}</W>`), the rendered element tag equal to the param key and the message tag name (`EL === W`), an attribute-free `<W>INNER</W>` spanning the whole message, and an INNER free of further tags and ICU placeholders. Multiple/inline tags, non-pure wrappers, `EL≠W` divergence, message-tag attributes, ICU placeholders, and `ns`/`noWrap`/`language`/`orEmpty`/spread props are left untouched. Configurable via `{ autofix, tags }` (the `tags` allowlist filters on the rendered element tag; empty = any).
+
+### Refactored
+
+- Extracted the shared static-analysis helpers (`isStaticString`, `findAttribute`, `getComponentContext`, `findUseTranslateT` + `isUseTranslateBinding`) from `prefer-t-function.ts` into `src/utils/tComponent.ts`; both `prefer-t-function` and `prefer-hoisted-tag` import them. `isTagParam`/`isJsxChild` stay local to `prefer-t-function`. Behaviour preserved (its test suite is unchanged and green).
+
 ## [0.3.1] — 2026-06-15
 
 ### Fixed

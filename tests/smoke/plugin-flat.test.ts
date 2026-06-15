@@ -13,7 +13,7 @@ const fixture = readFileSync(fixturePath, 'utf8')
 describe('plugin (flat config smoke test)', () => {
   it('exposes meta, rules, and recommended config', () => {
     expect(plugin.meta.name).toBe('@myeasyfarm/eslint-plugin-tolgee')
-    expect(plugin.meta.version).toBe('0.3.1')
+    expect(plugin.meta.version).toBe('0.4.0')
     expect(plugin.rules).toHaveProperty('require-key')
     expect(plugin.rules).toHaveProperty('prefer-string-arguments')
     expect(plugin.rules).toHaveProperty('no-dynamic-key')
