@@ -66,8 +66,11 @@ export default [tolgee.configs.recommended]
 | [`tolgee/no-tag-interpolation-in-t-call`](./docs/rules/no-tag-interpolation-in-t-call.md) | Disallows JSX values in the `params` of `t()` / `tolgee.t()`; tag interpolation works only on `<T>`. |   ❌    |
 | [`tolgee/no-self-closing-tags`](./docs/rules/no-self-closing-tags.md)                   | Disallows `<name/>` inside translation defaults — Tolgee does not parse self-closing tags. Autofixes to `<name></name>`. |   ✅    |
 | [`tolgee/prefer-t-function`](./docs/rules/prefer-t-function.md)                         | Prefer `t()` over `<T>` for static, tag-free translations (autofix when `t` is in scope). Opt-in — not in `recommended`. |  ✅\*   |
+| [`tolgee/prefer-hoisted-tag`](./docs/rules/prefer-hoisted-tag.md)                       | Prefer hoisting a whole-message wrapper tag out of `<T>` into code, translating plain text with `t()`. Opt-in — not in `recommended`. | 💡\*\* |
 
 \* Conditional autofix: fixes only when a `const { t } = useTranslate()` binding is already in scope; otherwise reports for manual conversion.
+
+\*\* Suggestion only by default — applying it requires a paired Tolgee data migration (strip the wrapper tag from the stored value), so it is offered as an editor suggestion, not a silent `--fix`. Set `{ autofix: true }` to promote it to a plain `--fix`.
 
 ## Configs
 

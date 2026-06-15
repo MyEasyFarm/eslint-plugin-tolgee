@@ -5,6 +5,7 @@ import noDynamicKey from './rules/no-dynamic-key.js'
 import noSelfClosingTags from './rules/no-self-closing-tags.js'
 import noTagInterpolationInTCall from './rules/no-tag-interpolation-in-t-call.js'
 import noUnusedPlaceholderParams from './rules/no-unused-placeholder-params.js'
+import preferHoistedTag from './rules/prefer-hoisted-tag.js'
 import preferStringArguments from './rules/prefer-string-arguments.js'
 import preferTFunction from './rules/prefer-t-function.js'
 import requireKey from './rules/require-key.js'
@@ -23,6 +24,7 @@ const plugin = {
     'no-tag-interpolation-in-t-call': noTagInterpolationInTCall,
     'no-self-closing-tags': noSelfClosingTags,
     'prefer-t-function': preferTFunction,
+    'prefer-hoisted-tag': preferHoistedTag,
   },
   configs: {} as Record<string, Linter.Config>,
 } satisfies ESLint.Plugin
