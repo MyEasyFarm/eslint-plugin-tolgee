@@ -56,6 +56,26 @@ run({
     { code: `const Foo = React.memo(() => <T keyName="k" defaultValue="x" />)` },
     // 14. A plain t() call already present (no <T>)
     { code: `function C() { const { t } = useTranslate(); return t('k', 'x') }` },
+    // 28. Arrow render-prop tag handler in params -> must stay <T>
+    {
+      code: `function C() { const { t } = useTranslate(); return <T keyName="k" defaultValue="<p>Hi</p>" params={{ p: (chunks) => <p>{chunks}</p> }} /> }`,
+    },
+    // 29. Arrow render-prop with a TS-annotated parameter
+    {
+      code: `function C() { const { t } = useTranslate(); return <T keyName="k" defaultValue="<p>Hi</p>" params={{ p: (chunks: ReactNode) => <p className="mb-[10px]">{chunks}</p> }} /> }`,
+    },
+    // 30. FunctionExpression tag handler in params
+    {
+      code: `function C() { const { t } = useTranslate(); return <T keyName="k" defaultValue="<b>Hi</b>" params={{ b: function (chunks) { return <b>{chunks}</b> } }} /> }`,
+    },
+    // 31. Method-shorthand tag handler in params
+    {
+      code: `function C() { const { t } = useTranslate(); return <T keyName="k" defaultValue="<p>Hi</p>" params={{ p(chunks) { return <p>{chunks}</p> } }} /> }`,
+    },
+    // 32. Spread in params -> contents unverifiable, stay <T>
+    {
+      code: `function C() { const { t } = useTranslate(); return <T keyName="k" defaultValue="Hi {name}" params={{ ...rest, name }} /> }`,
+    },
   ],
 
   invalid: [

@@ -2,8 +2,13 @@ import type { Rule } from 'eslint'
 
 import { isTComponent } from '../utils/isTranslationCall.js'
 
-function isJsxValue(node: any): boolean {
-  return node?.type === 'JSXElement' || node?.type === 'JSXFragment'
+function isTagParam(node: any): boolean {
+  return (
+    node?.type === 'JSXElement' ||
+    node?.type === 'JSXFragment' ||
+    node?.type === 'ArrowFunctionExpression' ||
+    node?.type === 'FunctionExpression'
+  )
 }
 
 function isStaticString(node: any): boolean {
@@ -155,7 +160,10 @@ const rule: Rule.RuleModule = {
           paramsObj =
             paramsAttr.value?.type === 'JSXExpressionContainer' ? paramsAttr.value.expression : null
           if (paramsObj?.type !== 'ObjectExpression') return
-          if (paramsObj.properties.some((p: any) => p.type === 'Property' && isJsxValue(p.value))) {
+          // Bail on any param that can't be statically flattened into a t() scalar
+          // arg: a tag handler (JSX element/fragment or a render-prop function) or a
+          // spread (SpreadElement, whose contents can't be verified). <T> stays.
+          if (paramsObj.properties.some((p: any) => p.type !== 'Property' || isTagParam(p.value))) {
             return
           }
         }

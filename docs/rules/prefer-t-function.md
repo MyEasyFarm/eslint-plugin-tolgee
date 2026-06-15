@@ -2,13 +2,13 @@
 
 Flags `<T>` components that have a static key, a static default value, and **no tag interpolation in `params`** — situations where the `t()` function is fully equivalent. When a `const { t } = useTranslate()` binding is already in scope at the flagged site, the rule attaches an autofix; otherwise it reports the site for manual conversion.
 
-The precondition matters: `<T>` remains **required** whenever `params` contains JSX elements (tag interpolation). This rule only touches sites where `t()` is a genuine drop-in replacement.
+The precondition matters: `<T>` remains **required** whenever `params` contains a tag handler — a JSX element/fragment or a render-prop function (tag interpolation). This rule only touches sites where `t()` is a genuine drop-in replacement.
 
 **Not in `recommended`** — opt-in only. See [When NOT to use](#when-not-to-use--known-limitations) below.
 
 ## When NOT to use / known limitations
 
-- **Tag interpolation requires `<T>`**: if any `params` value is a JSX element or fragment (`params={{ br: <br /> }}`), the site is silently skipped. The complementary [`tolgee/no-tag-interpolation-in-t-call`](./no-tag-interpolation-in-t-call.md) rule enforces the inverse — never pass JSX to `t()`. These two rules are consistent: `<T>` is mandatory for tags; `t()` is preferred otherwise.
+- **Tag interpolation requires `<T>`**: if any `params` value is a tag handler — a JSX element/fragment (`params={{ br: <br /> }}`) **or** a render-prop function (`params={{ p: (chunks) => <p>{chunks}</p> }}`) — the site is silently skipped. A `params` object that contains a spread (`params={{ ...rest }}`) is also skipped, since the spread's contents can't be statically verified. The complementary [`tolgee/no-tag-interpolation-in-t-call`](./no-tag-interpolation-in-t-call.md) rule enforces the inverse — never pass JSX to `t()`. These two rules are consistent: `<T>` is mandatory for tags; `t()` is preferred otherwise. The check is conservative but not exhaustive: a value that only *evaluates* to an element at runtime (a conditional like `cond ? <a/> : <b/>`, or a variable holding an element) is not statically detected — keep using `<T>` for any tag interpolation.
 - **Deliberate under-reporting**: the following contexts are never reported even where a fix would be safe — this is an intentional v1 scope decision to avoid false positives:
   - Class components (`render()` methods and other class methods).
   - Module-scope array/object literals (e.g. route config arrays).
